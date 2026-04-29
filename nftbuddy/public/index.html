@@ -1,0 +1,1179 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover"/>
+<meta name="theme-color" content="#0CC8A8"/>
+<meta name="apple-mobile-web-app-capable" content="yes"/>
+<meta name="apple-mobile-web-app-title" content="NFT Buddy"/>
+<link rel="manifest" href="/manifest.json"/>
+<title>NFT Buddy</title>
+<link rel="preconnect" href="https://fonts.googleapis.com"/>
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet"/>
+
+<style>
+:root{
+  --teal:#0CC8A8;
+  --teal-dark:#08A98D;
+  --teal-deeper:#06866E;
+  --teal-light:#E6FAF7;
+  --teal-bg:#F0FBF9;
+  --bg:#F5F7F6;
+  --surface:#FFFFFF;
+  --surface2:#F2F4F3;
+  --border:#E8ECEB;
+  --text:#0F1F1C;
+  --text2:#4A6560;
+  --text3:#8FA9A4;
+  --red:#F05A5A;--red-bg:#FEF0F0;--red-dk:#C0392B;
+  --blue:#4A90D9;--blue-bg:#EEF5FC;--blue-dk:#1D4E89;
+  --green:#2BC48A;--green-bg:#EDFAF4;--green-dk:#0E7A52;
+  --amber:#F0A030;--amber-bg:#FEF6E8;--amber-dk:#8A5000;
+  --violet:#7B68EE;--violet-bg:#F0EFFE;
+  --sol:#9945FF;--sol-bg:#F5EEFF;
+  --shadow-sm:0 1px 3px rgba(0,0,0,.06);
+  --shadow:0 2px 12px rgba(12,200,168,.10),0 1px 3px rgba(0,0,0,.05);
+  --shadow-card:0 4px 20px rgba(0,0,0,.07);
+  --r:14px;--r-lg:20px;--r-xl:24px;
+  --font:'DM Sans',system-ui,sans-serif;
+}
+[data-theme=dark]{
+  --bg:#0A1614;--surface:#122320;--surface2:#1C332E;
+  --border:#1F3530;--text:#E8F5F2;--text2:#7AADA6;--text3:#3D6B63;
+  --teal-bg:#0D2420;--teal-light:#0D2420;
+  --red-bg:#2A1010;--blue-bg:#0D1D2E;--green-bg:#0A221A;
+  --amber-bg:#221608;--violet-bg:#171228;--sol-bg:#150C28;
+  --shadow:0 2px 12px rgba(0,0,0,.4);--shadow-card:0 4px 20px rgba(0,0,0,.35);
+}
+*{box-sizing:border-box;margin:0;padding:0;}
+html,body{height:100%;overflow:hidden;}
+body{font-family:var(--font);background:var(--bg);color:var(--text);-webkit-font-smoothing:antialiased;}
+#app{display:flex;flex-direction:column;height:100%;max-width:430px;margin:0 auto;position:relative;overflow:hidden;}
+
+/* ── SCREEN SYSTEM ── */
+.screen{display:none;flex-direction:column;height:100%;overflow:hidden;}
+.screen.active{display:flex;}
+.scroll{flex:1;overflow-y:auto;-webkit-overflow-scrolling:touch;}
+.scroll::-webkit-scrollbar{display:none;}
+
+/* ── LOGIN SCREEN ── */
+#sc-login{background:linear-gradient(160deg,#0CC8A8 0%,#08A98D 50%,#065E4E 100%);justify-content:center;align-items:center;padding:40px 32px;}
+.login-logo{width:72px;height:72px;background:rgba(255,255,255,.2);border-radius:22px;display:flex;align-items:center;justify-content:center;margin-bottom:28px;backdrop-filter:blur(10px);}
+.login-title{font-size:32px;font-weight:800;color:#fff;text-align:center;margin-bottom:8px;letter-spacing:-.5px;}
+.login-sub{font-size:15px;color:rgba(255,255,255,.75);text-align:center;margin-bottom:52px;line-height:1.6;}
+.google-btn{display:flex;align-items:center;gap:12px;background:#fff;border:none;border-radius:16px;padding:16px 28px;font-size:15px;font-weight:700;color:#1a1a1a;cursor:pointer;font-family:var(--font);box-shadow:0 8px 32px rgba(0,0,0,.18);transition:transform .15s,box-shadow .15s;width:100%;justify-content:center;}
+.google-btn:hover{transform:translateY(-2px);box-shadow:0 12px 40px rgba(0,0,0,.22);}
+.google-btn:active{transform:scale(.97);}
+.login-skip{margin-top:20px;font-size:13px;color:rgba(255,255,255,.6);cursor:pointer;text-align:center;padding:8px;}
+.login-skip:hover{color:rgba(255,255,255,.9);}
+
+/* ── TOP HERO (home) ── */
+.hero{
+  background:linear-gradient(145deg,var(--teal) 0%,var(--teal-dark) 100%);
+  padding:calc(env(safe-area-inset-top,0px) + 14px) 20px 0;
+  position:relative;overflow:hidden;
+}
+.hero::after{content:'';position:absolute;right:-30px;top:-30px;width:180px;height:180px;background:rgba(255,255,255,.07);border-radius:50%;pointer-events:none;}
+.hero::before{content:'';position:absolute;right:40px;top:60px;width:90px;height:90px;background:rgba(255,255,255,.05);border-radius:50%;pointer-events:none;}
+.hero-top{display:flex;align-items:center;justify-content:space-between;margin-bottom:16px;}
+.hero-menu{width:36px;height:36px;display:flex;flex-direction:column;justify-content:center;gap:5px;cursor:pointer;}
+.hero-menu span{display:block;height:2px;background:rgba(255,255,255,.9);border-radius:2px;transition:width .2s;}
+.hero-menu span:nth-child(2){width:60%;}
+.hero-add{width:36px;height:36px;background:rgba(255,255,255,.2);border-radius:12px;display:flex;align-items:center;justify-content:center;cursor:pointer;border:none;backdrop-filter:blur(4px);}
+.hero-greeting{font-size:13px;color:rgba(255,255,255,.75);margin-bottom:4px;font-weight:500;}
+.hero-name{font-size:26px;font-weight:800;color:#fff;margin-bottom:4px;letter-spacing:-.3px;}
+.hero-tagline{font-size:13px;color:rgba(255,255,255,.7);margin-bottom:20px;}
+/* Week strip */
+.week-strip{display:flex;gap:6px;padding:0 0 16px;}
+.week-day{flex:1;display:flex;flex-direction:column;align-items:center;gap:5px;cursor:pointer;}
+.week-label{font-size:10px;font-weight:700;color:rgba(255,255,255,.6);text-transform:uppercase;letter-spacing:.3px;}
+.week-num{width:34px;height:34px;border-radius:10px;display:flex;align-items:center;justify-content:center;font-size:14px;font-weight:700;color:rgba(255,255,255,.8);background:rgba(255,255,255,.12);transition:all .15s;}
+.week-day.today .week-num{background:#fff;color:var(--teal-dark);box-shadow:0 4px 12px rgba(0,0,0,.15);}
+.week-day.has-mint .week-label{color:rgba(255,255,255,.9);}
+.week-day.has-mint .week-num::after{content:'';position:absolute;bottom:2px;width:4px;height:4px;background:rgba(255,255,255,.8);border-radius:50%;}
+.week-dot{width:4px;height:4px;background:rgba(255,255,255,.5);border-radius:50%;opacity:0;}
+.week-day.has-mint .week-dot{opacity:1;}
+
+/* ── HOME BODY ── */
+.home-body{padding:16px 16px 90px;}
+.section-row{display:flex;align-items:center;justify-content:space-between;margin-bottom:12px;}
+.section-title{font-size:18px;font-weight:800;color:var(--text);letter-spacing:-.2px;}
+.section-more{font-size:13px;font-weight:600;color:var(--teal);cursor:pointer;}
+
+/* ── REMINDER CARD ── */
+.rcard{
+  display:flex;align-items:stretch;background:var(--surface);
+  border-radius:var(--r-lg);border:1px solid var(--border);
+  margin-bottom:10px;box-shadow:var(--shadow-sm);
+  overflow:hidden;cursor:pointer;transition:transform .12s,box-shadow .12s;
+}
+.rcard:active{transform:scale(.985);}
+.rcard-bar{width:5px;flex-shrink:0;}
+.rcard-body{flex:1;padding:13px 14px 12px;}
+.rcard-top{display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:6px;}
+.rcard-name{font-size:15px;font-weight:700;color:var(--text);line-height:1.3;flex:1;padding-right:8px;}
+.rcard-time{font-size:11px;font-weight:600;padding:3px 10px;border-radius:20px;white-space:nowrap;flex-shrink:0;}
+.rcard-date{font-size:12px;color:var(--text3);font-weight:500;margin-bottom:7px;}
+.rcard-tags{display:flex;gap:5px;flex-wrap:wrap;margin-bottom:8px;}
+.rtag{font-size:11px;font-weight:700;padding:2px 8px;border-radius:6px;}
+.rcard-foot{display:flex;justify-content:space-between;align-items:center;padding-top:8px;border-top:1px solid var(--border);}
+.rcard-link{font-size:12px;font-weight:600;color:var(--teal);text-decoration:none;}
+.rcard-action{font-size:12px;color:var(--text3);cursor:pointer;background:none;border:none;font-family:var(--font);}
+.rcard-notes{font-size:12px;color:var(--text3);margin-bottom:7px;line-height:1.4;}
+
+/* Time pill variants */
+.tp-urgent{background:var(--red-bg);color:var(--red-dk);}
+.tp-soon{background:var(--amber-bg);color:var(--amber-dk);}
+.tp-normal{background:var(--surface2);color:var(--text2);}
+.tp-done{background:var(--green-bg);color:var(--green-dk);}
+.tp-missed{background:var(--red-bg);color:var(--red-dk);}
+
+/* Tag variants */
+.tag-fcfs{background:var(--red-bg);color:var(--red-dk);}
+.tag-gtd{background:var(--blue-bg);color:var(--blue-dk);}
+.tag-free{background:var(--green-bg);color:var(--green-dk);}
+.tag-paid{background:var(--amber-bg);color:var(--amber-dk);}
+.tag-price{background:var(--surface2);color:var(--text2);}
+.tag-eth{background:var(--violet-bg);color:var(--violet);}
+.tag-sol{background:var(--sol-bg);color:var(--sol);}
+
+/* ── CATEGORIES SCREEN ── */
+.cat-header{
+  background:linear-gradient(145deg,var(--teal) 0%,var(--teal-dark) 100%);
+  padding:calc(env(safe-area-inset-top,0px)+14px) 20px 24px;
+}
+.cat-back{display:flex;align-items:center;gap:8px;margin-bottom:20px;cursor:pointer;}
+.cat-back-arrow{font-size:20px;color:#fff;}
+.cat-header-title{font-size:22px;font-weight:800;color:#fff;margin-bottom:4px;}
+.cat-header-sub{font-size:13px;color:rgba(255,255,255,.7);}
+.cat-body{padding:20px 16px 90px;}
+.cat-sub{font-size:13px;font-weight:600;color:var(--text3);margin-bottom:14px;letter-spacing:.2px;}
+.cat-grid{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:24px;}
+.cat-card{
+  background:var(--surface);border:1px solid var(--border);border-radius:var(--r-xl);
+  padding:22px 16px 18px;display:flex;flex-direction:column;align-items:center;gap:10px;
+  cursor:pointer;transition:transform .12s,box-shadow .12s;box-shadow:var(--shadow-sm);
+  position:relative;overflow:hidden;
+}
+.cat-card::before{content:'';position:absolute;inset:0;opacity:0;transition:opacity .15s;}
+.cat-card:active{transform:scale(.96);box-shadow:none;}
+.cat-icon{width:54px;height:54px;border-radius:18px;display:flex;align-items:center;justify-content:center;}
+.cat-label{font-size:14px;font-weight:700;color:var(--text);text-align:center;}
+.cat-count{font-size:11px;font-weight:600;color:var(--text3);}
+
+/* ── CALENDAR ── */
+.cal-hero{
+  background:linear-gradient(145deg,var(--teal) 0%,var(--teal-dark) 100%);
+  padding:calc(env(safe-area-inset-top,0px)+14px) 20px 16px;
+}
+.cal-nav-row{display:flex;justify-content:space-between;align-items:center;margin-bottom:14px;}
+.cal-month-lbl{font-size:18px;font-weight:800;color:#fff;}
+.cal-arr{width:34px;height:34px;background:rgba(255,255,255,.18);border:none;border-radius:10px;font-size:18px;color:#fff;cursor:pointer;display:flex;align-items:center;justify-content:center;}
+.cal-grid-wrap{background:rgba(255,255,255,.12);border-radius:var(--r-lg);padding:12px;backdrop-filter:blur(4px);}
+.cal-grid{display:grid;grid-template-columns:repeat(7,1fr);gap:2px;}
+.cal-dow{font-size:10px;font-weight:700;color:rgba(255,255,255,.6);text-align:center;padding:3px 0;letter-spacing:.3px;}
+.cc{aspect-ratio:1;display:flex;flex-direction:column;align-items:center;justify-content:center;border-radius:8px;cursor:pointer;position:relative;transition:background .1s;}
+.cc:hover{background:rgba(255,255,255,.1);}
+.cn{font-size:12px;color:rgba(255,255,255,.8);font-weight:500;}
+.cc.ct .cn{color:#fff;font-weight:800;}
+.cc.cs{background:#fff;}
+.cc.cs .cn{color:var(--teal-dark);font-weight:800;}
+.cc.cm .cn{color:rgba(255,255,255,.3);}
+.cdw{display:flex;gap:2px;position:absolute;bottom:3px;}
+.cdot{width:4px;height:4px;border-radius:2px;}
+.cal-events-area{padding:14px 16px 90px;}
+.cal-day-lbl{font-size:15px;font-weight:800;color:var(--text);margin-bottom:12px;}
+.cal-event{background:var(--surface);border-radius:var(--r);border:1px solid var(--border);padding:12px 14px;margin-bottom:8px;display:flex;align-items:center;gap:12px;box-shadow:var(--shadow-sm);}
+.cal-edot{width:10px;height:10px;border-radius:3px;flex-shrink:0;}
+.cal-ename{font-size:13px;font-weight:700;color:var(--text);}
+.cal-emeta{font-size:11px;color:var(--text3);margin-top:2px;}
+
+/* ── SETTINGS ── */
+.settings-hero{
+  background:linear-gradient(145deg,var(--teal) 0%,var(--teal-dark) 100%);
+  padding:calc(env(safe-area-inset-top,0px)+14px) 20px 24px;
+  display:flex;align-items:center;gap:16px;
+}
+.settings-avatar{width:52px;height:52px;border-radius:18px;border:2px solid rgba(255,255,255,.3);object-fit:cover;background:rgba(255,255,255,.2);display:flex;align-items:center;justify-content:center;font-size:22px;font-weight:700;color:#fff;flex-shrink:0;overflow:hidden;}
+.settings-avatar img{width:100%;height:100%;object-fit:cover;}
+.settings-uname{font-size:17px;font-weight:800;color:#fff;}
+.settings-uemail{font-size:12px;color:rgba(255,255,255,.7);margin-top:2px;}
+.sgroup{background:var(--surface);border-radius:var(--r-lg);border:1px solid var(--border);overflow:hidden;margin-bottom:8px;box-shadow:var(--shadow-sm);}
+.srow{display:flex;align-items:center;gap:12px;padding:13px 16px;border-bottom:1px solid var(--border);cursor:pointer;transition:background .1s;text-decoration:none;}
+.srow:last-child{border-bottom:none;}
+.srow:hover{background:var(--teal-bg);}
+.sicon{width:34px;height:34px;border-radius:11px;background:var(--teal-light);display:flex;align-items:center;justify-content:center;flex-shrink:0;}
+.slabel{font-size:14px;font-weight:600;color:var(--text);flex:1;}
+.ssub{font-size:12px;color:var(--text3);margin-top:1px;}
+.schev{font-size:16px;color:var(--text3);}
+.toggle{width:42px;height:24px;background:var(--border);border-radius:12px;position:relative;cursor:pointer;transition:background .2s;flex-shrink:0;}
+.toggle.on{background:var(--teal);}
+.toggle::after{content:'';position:absolute;left:3px;top:3px;width:18px;height:18px;background:#fff;border-radius:50%;transition:transform .2s;box-shadow:0 1px 3px rgba(0,0,0,.15);}
+.toggle.on::after{transform:translateX(18px);}
+.stats-grid{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:8px;}
+.stat-box{background:var(--surface);border:1px solid var(--border);border-radius:var(--r-lg);padding:14px 16px;box-shadow:var(--shadow-sm);}
+.stat-num{font-size:30px;font-weight:800;line-height:1;}
+.stat-lbl{font-size:12px;color:var(--text3);margin-top:4px;font-weight:600;}
+.slabel-wrap{flex:1;}
+
+/* ── FILTERS ── */
+.filters{display:flex;gap:6px;padding:12px 16px;overflow-x:auto;scrollbar-width:none;background:var(--surface);border-bottom:1px solid var(--border);}
+.filters::-webkit-scrollbar{display:none;}
+.chip{white-space:nowrap;padding:7px 14px;border-radius:20px;font-size:13px;font-weight:700;border:1.5px solid var(--border);color:var(--text2);background:var(--bg);cursor:pointer;transition:all .15s;flex-shrink:0;}
+.chip.on{background:var(--teal);border-color:var(--teal);color:#fff;}
+
+/* ── BOTTOM NAV ── */
+.bnav{
+  background:var(--surface);border-top:1px solid var(--border);display:flex;
+  padding-bottom:env(safe-area-inset-bottom,0);flex-shrink:0;z-index:99;
+}
+.nb{flex:1;display:flex;flex-direction:column;align-items:center;gap:3px;padding:10px 0 8px;cursor:pointer;background:none;border:none;font-family:var(--font);}
+.nb-label{font-size:10px;font-weight:700;color:var(--text3);}
+.nb.on .nb-label{color:var(--teal);}
+
+/* ── FAB ── */
+.fab{position:fixed;bottom:calc(72px + env(safe-area-inset-bottom,0));right:20px;width:52px;height:52px;border-radius:26px;background:var(--teal);border:none;cursor:pointer;display:flex;align-items:center;justify-content:center;box-shadow:0 6px 20px rgba(12,200,168,.45);transition:transform .15s;z-index:100;}
+.fab:hover{transform:translateY(-2px);}
+.fab:active{transform:scale(.93);}
+
+/* ── MODAL ── */
+.overlay{display:none;position:fixed;inset:0;background:rgba(0,0,0,.4);z-index:200;align-items:flex-end;backdrop-filter:blur(3px);}
+.overlay.open{display:flex;}
+.modal{background:var(--surface);border-radius:24px 24px 0 0;width:100%;max-width:430px;margin:0 auto;max-height:92vh;display:flex;flex-direction:column;transform:translateY(100%);transition:transform .3s cubic-bezier(.32,.72,0,1);}
+.overlay.open .modal{transform:translateY(0);}
+.mhead{display:flex;align-items:center;justify-content:space-between;padding:16px 20px;border-bottom:1px solid var(--border);flex-shrink:0;}
+.mtitle{font-size:16px;font-weight:800;color:var(--text);}
+.mclose{width:32px;height:32px;border-radius:50%;background:var(--surface2);border:none;cursor:pointer;font-size:16px;color:var(--text2);display:flex;align-items:center;justify-content:center;}
+.msave{background:var(--teal);color:#fff;border:none;padding:9px 20px;border-radius:12px;font-size:14px;font-weight:800;cursor:pointer;font-family:var(--font);}
+.mbody{overflow-y:auto;padding:20px;display:flex;flex-direction:column;gap:15px;}
+.mbody::-webkit-scrollbar{display:none;}
+
+/* ── FORM ── */
+.field{display:flex;flex-direction:column;gap:6px;}
+.flabel{font-size:11px;font-weight:800;color:var(--text3);letter-spacing:.7px;text-transform:uppercase;}
+.finput{background:var(--surface);border:1.5px solid var(--border);border-radius:12px;padding:12px 14px;font-size:14px;color:var(--text);font-family:var(--font);outline:none;width:100%;transition:border-color .15s;}
+.finput::placeholder{color:var(--text3);}
+.finput:focus{border-color:var(--teal);}
+.finput.err{border-color:var(--red);}
+textarea.finput{resize:none;height:80px;line-height:1.5;}
+.frow{display:grid;grid-template-columns:1fr 1fr;gap:8px;}
+.sel-grid{display:grid;grid-template-columns:1fr 1fr;gap:8px;}
+.sopt{background:var(--surface);border:1.5px solid var(--border);border-radius:12px;padding:13px 12px;text-align:center;cursor:pointer;transition:all .15s;}
+.sopt.on{border-color:var(--teal);background:var(--teal-light);}
+.sopt-t{font-size:14px;font-weight:800;color:var(--text);margin-bottom:2px;}
+.sopt-s{font-size:11px;color:var(--text3);}
+.sopt.on .sopt-t{color:var(--teal-deeper);}
+.hint{background:var(--teal-light);border-radius:12px;padding:12px 14px;font-size:12px;color:var(--teal-deeper);line-height:1.6;font-weight:600;}
+
+/* ── SHEET ── */
+.sheet-overlay{display:none;position:fixed;inset:0;background:rgba(0,0,0,.35);z-index:300;align-items:flex-end;backdrop-filter:blur(2px);}
+.sheet-overlay.open{display:flex;}
+.sheet{background:var(--surface);border-radius:24px 24px 0 0;width:100%;max-width:430px;margin:0 auto;padding:8px 12px calc(12px + env(safe-area-inset-bottom,0));transform:translateY(100%);transition:transform .3s cubic-bezier(.32,.72,0,1);}
+.sheet-overlay.open .sheet{transform:translateY(0);}
+.sh-title{font-size:12px;font-weight:800;color:var(--text3);text-align:center;padding:8px 0 12px;letter-spacing:.4px;text-transform:uppercase;}
+.sh-btn{display:flex;align-items:center;width:100%;padding:14px 12px;border:none;background:none;border-radius:12px;font-size:16px;font-weight:600;color:var(--text);cursor:pointer;font-family:var(--font);gap:12px;transition:background .1s;}
+.sh-btn:hover{background:var(--surface2);}
+.sh-btn.danger{color:var(--red);}
+.sh-btn.cancel{color:var(--text2);margin-top:6px;border-top:1px solid var(--border);padding-top:14px;}
+
+/* ── NOTIFICATION PROMPT ── */
+.notif-prompt{background:var(--surface);border:1px solid var(--border);border-radius:var(--r-lg);margin:12px 16px 0;padding:14px 16px;display:none;align-items:center;gap:12px;box-shadow:var(--shadow-sm);}
+.notif-prompt.show{display:flex;}
+.np-text{flex:1;font-size:13px;color:var(--text);font-weight:600;line-height:1.4;}
+.np-text span{color:var(--text3);font-weight:400;}
+.np-btn{background:var(--teal);color:#fff;border:none;padding:8px 14px;border-radius:10px;font-size:13px;font-weight:800;cursor:pointer;font-family:var(--font);}
+
+/* ── TOAST ── */
+.toast{position:fixed;bottom:calc(82px + env(safe-area-inset-bottom,0));left:50%;transform:translateX(-50%) translateY(16px);background:var(--text);color:var(--bg);padding:11px 22px;border-radius:20px;font-size:13px;font-weight:700;opacity:0;transition:all .25s;z-index:500;white-space:nowrap;pointer-events:none;}
+.toast.show{opacity:1;transform:translateX(-50%) translateY(0);}
+
+/* ── EMPTY STATE ── */
+.empty{display:flex;flex-direction:column;align-items:center;justify-content:center;padding:60px 40px;text-align:center;}
+.empty-icon{width:64px;height:64px;background:var(--teal-light);border-radius:20px;display:flex;align-items:center;justify-content:center;margin-bottom:20px;}
+.empty-t{font-size:18px;font-weight:800;color:var(--text);margin-bottom:6px;}
+.empty-s{font-size:14px;color:var(--text3);line-height:1.6;}
+
+/* ── RESPONSIVE ── */
+@media(min-width:431px){
+  #app{border-left:1px solid var(--border);border-right:1px solid var(--border);}
+  .overlay,.sheet-overlay{padding:0 calc((100vw - 430px)/2);}
+}
+</style>
+</head>
+<body>
+<div id="app">
+
+<!-- ═══════════════════════════════════════════
+  LOGIN SCREEN
+══════════════════════════════════════════════ -->
+<div id="sc-login" class="screen active">
+  <div class="login-logo">
+    <svg width="38" height="38" viewBox="0 0 38 38" fill="none">
+      <rect x="4" y="4" width="12" height="20" rx="3" fill="white" opacity=".9"/>
+      <rect x="22" y="4" width="12" height="12" rx="3" fill="white"/>
+      <rect x="22" y="22" width="12" height="12" rx="3" fill="white" opacity=".6"/>
+    </svg>
+  </div>
+  <div class="login-title">NFT Buddy</div>
+  <div class="login-sub">Never miss a drop — your NFT mint companion.<br/>What should we call you?</div>
+  <div style="width:100%;display:flex;flex-direction:column;gap:12px;">
+    <input
+      id="name-input"
+      type="text"
+      placeholder="Your name"
+      autocomplete="given-name"
+      maxlength="32"
+      style="width:100%;background:rgba(255,255,255,.2);border:1.5px solid rgba(255,255,255,.35);border-radius:16px;padding:16px 20px;font-size:16px;color:#fff;font-family:var(--font);font-weight:600;outline:none;backdrop-filter:blur(4px);transition:border-color .15s;"
+      onfocus="this.style.borderColor='rgba(255,255,255,.8)'"
+      onblur="this.style.borderColor='rgba(255,255,255,.35)'"
+      onkeydown="if(event.key==='Enter') submitName()"
+    />
+    <button class="google-btn" onclick="submitName()">Let's go</button>
+  </div>
+</div>
+
+<!-- ═══════════════════════════════════════════
+  HOME SCREEN
+══════════════════════════════════════════════ -->
+<div id="sc-home" class="screen">
+  <div class="hero">
+    <div class="hero-top">
+      <div class="hero-menu" onclick="switchScreen('settings',document.querySelector('[data-s=settings]'))">
+        <span></span><span></span><span></span>
+      </div>
+      <button class="hero-add" onclick="openAddModal()" aria-label="Add reminder">
+        <svg width="18" height="18" viewBox="0 0 18 18" fill="none">
+          <line x1="9" y1="2" x2="9" y2="16" stroke="white" stroke-width="2" stroke-linecap="round"/>
+          <line x1="2" y1="9" x2="16" y2="9" stroke="white" stroke-width="2" stroke-linecap="round"/>
+        </svg>
+      </button>
+    </div>
+    <div class="hero-greeting" id="greeting-text">Good morning</div>
+    <div class="hero-name" id="hero-name">Hey there!</div>
+    <div class="hero-tagline">Never miss a drop. Your NFT buddy has you covered.</div>
+    <div class="week-strip" id="week-strip"></div>
+  </div>
+
+  <div class="filters" id="filter-row">
+    <div class="chip on" data-filter="all">All</div>
+    <div class="chip" data-filter="upcoming">Upcoming</div>
+    <div class="chip" data-filter="fcfs">FCFS</div>
+    <div class="chip" data-filter="gtd">GTD</div>
+    <div class="chip" data-filter="free">Free</div>
+    <div class="chip" data-filter="paid">Paid</div>
+    <div class="chip" data-filter="minted">Minted</div>
+  </div>
+
+  <div class="notif-prompt" id="notif-prompt">
+    <div class="np-text">Enable notifications <span>to get mint alerts.</span></div>
+    <button class="np-btn" onclick="requestNotifPermission()">Enable</button>
+  </div>
+
+  <div class="scroll">
+    <div class="home-body">
+      <div class="section-row">
+        <div class="section-title" id="today-label">Today's Mints</div>
+        <div class="section-more" onclick="switchScreen('cal',document.querySelector('[data-s=cal]'))">See calendar</div>
+      </div>
+      <div id="reminders-list"></div>
+    </div>
+  </div>
+
+  <button class="fab" onclick="openAddModal()">
+    <svg width="22" height="22" viewBox="0 0 22 22" fill="none">
+      <line x1="11" y1="3" x2="11" y2="19" stroke="white" stroke-width="2.3" stroke-linecap="round"/>
+      <line x1="3" y1="11" x2="19" y2="11" stroke="white" stroke-width="2.3" stroke-linecap="round"/>
+    </svg>
+  </button>
+</div>
+
+<!-- ═══════════════════════════════════════════
+  CATEGORIES SCREEN
+══════════════════════════════════════════════ -->
+<div id="sc-cats" class="screen">
+  <div class="cat-header">
+    <div class="cat-back" onclick="switchScreen('home',document.querySelector('[data-s=home]'))">
+      <span class="cat-back-arrow">‹</span>
+      <span style="font-size:14px;color:rgba(255,255,255,.8);font-weight:600;">Back</span>
+    </div>
+    <div class="cat-header-title">Categories</div>
+    <div class="cat-header-sub">Filter mints by type</div>
+  </div>
+  <div class="scroll">
+    <div class="cat-body">
+      <div class="cat-sub">ACCESS TYPE</div>
+      <div class="cat-grid">
+        <div class="cat-card" onclick="filterByCategory('fcfs')">
+          <div class="cat-icon" style="background:var(--red-bg);">
+            <svg width="28" height="28" viewBox="0 0 28 28" fill="none"><path d="M14 4L4 14l10 10 10-10L14 4z" stroke="#F05A5A" stroke-width="2" stroke-linejoin="round"/><path d="M14 9v10M9 14h10" stroke="#F05A5A" stroke-width="2" stroke-linecap="round"/></svg>
+          </div>
+          <div class="cat-label">FCFS</div>
+          <div class="cat-count" id="cat-fcfs-count">0 mints</div>
+        </div>
+        <div class="cat-card" onclick="filterByCategory('gtd')">
+          <div class="cat-icon" style="background:var(--blue-bg);">
+            <svg width="28" height="28" viewBox="0 0 28 28" fill="none"><circle cx="14" cy="14" r="9" stroke="#4A90D9" stroke-width="2"/><path d="M9.5 14.5l3 3 6-7" stroke="#4A90D9" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+          </div>
+          <div class="cat-label">GTD</div>
+          <div class="cat-count" id="cat-gtd-count">0 mints</div>
+        </div>
+      </div>
+
+      <div class="cat-sub">COST TYPE</div>
+      <div class="cat-grid">
+        <div class="cat-card" onclick="filterByCategory('free')">
+          <div class="cat-icon" style="background:var(--green-bg);">
+            <svg width="28" height="28" viewBox="0 0 28 28" fill="none"><rect x="5" y="8" width="18" height="14" rx="3" stroke="#2BC48A" stroke-width="2"/><path d="M9 8V7a5 5 0 0 1 10 0v1" stroke="#2BC48A" stroke-width="2" stroke-linecap="round"/><circle cx="14" cy="15" r="2" fill="#2BC48A"/></svg>
+          </div>
+          <div class="cat-label">Free Mint</div>
+          <div class="cat-count" id="cat-free-count">0 mints</div>
+        </div>
+        <div class="cat-card" onclick="filterByCategory('paid')">
+          <div class="cat-icon" style="background:var(--amber-bg);">
+            <svg width="28" height="28" viewBox="0 0 28 28" fill="none"><circle cx="14" cy="14" r="9" stroke="#F0A030" stroke-width="2"/><path d="M14 9v2m0 6v2m-2.5-6.5c0-1.1.9-2 2-2h1a2 2 0 0 1 0 4h-1a2 2 0 0 0 0 4h1a2 2 0 0 0 2-2" stroke="#F0A030" stroke-width="1.8" stroke-linecap="round"/></svg>
+          </div>
+          <div class="cat-label">Paid Mint</div>
+          <div class="cat-count" id="cat-paid-count">0 mints</div>
+        </div>
+      </div>
+
+      <div class="cat-sub">BY CHAIN</div>
+      <div class="cat-grid">
+        <div class="cat-card" onclick="filterByChain('eth')">
+          <div class="cat-icon" style="background:var(--violet-bg);">
+            <svg width="28" height="28" viewBox="0 0 28 28" fill="none"><path d="M14 4l-7 10 7 4 7-4-7-10z" stroke="#7B68EE" stroke-width="2" stroke-linejoin="round"/><path d="M7 14l7 10 7-10-7 4-7-4z" stroke="#7B68EE" stroke-width="2" stroke-linejoin="round"/></svg>
+          </div>
+          <div class="cat-label">Ethereum</div>
+          <div class="cat-count" id="cat-eth-count">0 mints</div>
+        </div>
+        <div class="cat-card" onclick="filterByChain('sol')">
+          <div class="cat-icon" style="background:var(--sol-bg);">
+            <svg width="28" height="28" viewBox="0 0 28 28" fill="none"><path d="M7 18h14l-3 3H7l3-3z" fill="#9945FF" opacity=".9"/><path d="M7 13h14l3-3H10l-3 3z" fill="#9945FF" opacity=".7"/><path d="M7 8h14l3 3H10L7 8z" fill="#9945FF"/></svg>
+          </div>
+          <div class="cat-label">Solana</div>
+          <div class="cat-count" id="cat-sol-count">0 mints</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ═══════════════════════════════════════════
+  CALENDAR SCREEN
+══════════════════════════════════════════════ -->
+<div id="sc-cal" class="screen">
+  <div class="cal-hero">
+    <div class="cal-nav-row">
+      <button class="cal-arr" onclick="changeMonth(-1)">‹</button>
+      <div class="cal-month-lbl" id="cal-month-lbl">April 2026</div>
+      <button class="cal-arr" onclick="changeMonth(1)">›</button>
+    </div>
+    <div class="cal-grid-wrap">
+      <div class="cal-grid" id="cal-grid"></div>
+    </div>
+  </div>
+  <div class="scroll">
+    <div class="cal-events-area" id="cal-events"></div>
+  </div>
+</div>
+
+<!-- ═══════════════════════════════════════════
+  SETTINGS SCREEN
+══════════════════════════════════════════════ -->
+<div id="sc-settings" class="screen">
+  <div class="settings-hero">
+    <div class="settings-avatar" id="settings-avatar">?</div>
+    <div>
+      <div class="settings-uname" id="settings-uname">Guest</div>
+      <div class="settings-uemail" id="settings-uemail">Not signed in</div>
+    </div>
+  </div>
+  <div class="scroll" style="padding-top:14px;">
+
+    <div style="font-size:11px;font-weight:800;color:var(--text3);letter-spacing:.6px;text-transform:uppercase;margin:0 16px 8px;">Appearance</div>
+    <div style="padding:0 16px;margin-bottom:8px;">
+      <div class="sgroup">
+        <div class="srow" onclick="toggleTheme()">
+          <div class="sicon"><svg width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M8 1v1.2M8 13.8V15M1 8h1.2M13.8 8H15M3.1 3.1l.85.85M12.05 12.05l.85.85M3.1 12.9l.85-.85M12.05 3.95l.85-.85M10.5 8a2.5 2.5 0 1 1-5 0 2.5 2.5 0 0 1 5 0z" stroke="var(--teal)" stroke-width="1.3" stroke-linecap="round"/></svg></div>
+          <div class="slabel-wrap"><div class="slabel">Dark mode</div><div class="ssub" id="theme-sub">Currently light</div></div>
+          <div class="toggle" id="theme-toggle"></div>
+        </div>
+      </div>
+    </div>
+
+    <div style="font-size:11px;font-weight:800;color:var(--text3);letter-spacing:.6px;text-transform:uppercase;margin:0 16px 8px;">Notifications</div>
+    <div style="padding:0 16px;margin-bottom:8px;">
+      <div class="sgroup">
+        <div class="srow" onclick="requestNotifPermission()">
+          <div class="sicon"><svg width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M8 1.5a5 5 0 0 1 5 5v3l1 1.5H2L3 9.5v-3a5 5 0 0 1 5-5zM6.5 13.5a1.5 1.5 0 0 0 3 0" stroke="var(--teal)" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
+          <div class="slabel-wrap"><div class="slabel">Push notifications</div><div class="ssub" id="notif-status-text">Tap to enable</div></div>
+          <span class="schev">›</span>
+        </div>
+      </div>
+    </div>
+
+    <div style="font-size:11px;font-weight:800;color:var(--text3);letter-spacing:.6px;text-transform:uppercase;margin:0 16px 8px;">Your stats</div>
+    <div class="stats-grid" style="padding:0 16px;margin-bottom:14px;">
+      <div class="stat-box"><div class="stat-num" style="color:var(--teal)" id="st-total">0</div><div class="stat-lbl">Total</div></div>
+      <div class="stat-box"><div class="stat-num" style="color:var(--blue)" id="st-upcoming">0</div><div class="stat-lbl">Upcoming</div></div>
+      <div class="stat-box"><div class="stat-num" style="color:var(--green)" id="st-minted">0</div><div class="stat-lbl">Minted</div></div>
+      <div class="stat-box"><div class="stat-num" style="color:var(--red)" id="st-missed">0</div><div class="stat-lbl">Missed</div></div>
+    </div>
+
+    <div style="font-size:11px;font-weight:800;color:var(--text3);letter-spacing:.6px;text-transform:uppercase;margin:0 16px 8px;">Admin — send to community</div>
+    <div style="padding:0 16px;margin-bottom:8px;">
+      <div style="background:var(--surface);border-radius:var(--r-lg);border:1px solid var(--border);padding:16px;box-shadow:var(--shadow-sm);">
+        <p style="font-size:12px;color:var(--text3);margin-bottom:12px;line-height:1.5;">Broadcast a push notification to all your subscribers using your Vercel <b style="color:var(--text2);">ADMIN_TOKEN</b>.</p>
+        <div style="display:flex;flex-direction:column;gap:10px;">
+          <div style="display:flex;gap:8px;align-items:center;">
+            <input id="admin-token-input" type="password" class="finput" placeholder="Admin token" style="flex:1;font-size:13px;" oninput="loadSubCount()"/>
+            <span id="admin-sub-count" style="font-size:12px;color:var(--text3);white-space:nowrap;min-width:72px;text-align:right;font-weight:600;"></span>
+          </div>
+          <input id="admin-notif-title" type="text" class="finput" placeholder="Notification title" style="font-size:13px;"/>
+          <input id="admin-notif-body" type="text" class="finput" placeholder="Message body" style="font-size:13px;"/>
+          <button id="admin-send-btn" onclick="adminSendPush()" style="background:var(--teal);color:#fff;border:none;border-radius:12px;padding:13px;font-size:14px;font-weight:800;cursor:pointer;font-family:var(--font);width:100%;transition:opacity .15s;">Send to all subscribers</button>
+        </div>
+      </div>
+    </div>
+
+    <div style="font-size:11px;font-weight:800;color:var(--text3);letter-spacing:.6px;text-transform:uppercase;margin:0 16px 8px;">Account</div>
+    <div style="padding:0 16px;margin-bottom:8px;">
+      <div class="sgroup">
+        <div class="srow" onclick="handleSignOut()" id="signout-row">
+          <div class="sicon"><svg width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M10 2H13a1 1 0 0 1 1 1v10a1 1 0 0 1-1 1H10M7 11l4-4-4-4M11 8H3" stroke="var(--red)" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
+          <div class="slabel-wrap"><div class="slabel" style="color:var(--red)">Sign out</div></div>
+        </div>
+      </div>
+    </div>
+
+    <div style="text-align:center;padding:20px 0 40px;font-size:12px;color:var(--text3);">NFT Buddy v1.0</div>
+  </div>
+</div>
+
+<!-- ═══════════════════════════════════════════
+  BOTTOM NAV
+══════════════════════════════════════════════ -->
+<nav class="bnav">
+  <button class="nb on" data-s="home" onclick="switchScreen('home',this)">
+    <svg width="20" height="20" viewBox="0 0 20 20" fill="none"><rect x="2" y="10" width="6" height="8" rx="1.5" stroke="var(--teal)" stroke-width="1.6"/><rect x="11" y="2" width="7" height="16" rx="1.5" stroke="var(--teal)" stroke-width="1.6"/></svg>
+    <span class="nb-label" style="color:var(--teal)">Reminders</span>
+  </button>
+  <button class="nb" data-s="cats" onclick="switchScreen('cats',this)">
+    <svg width="20" height="20" viewBox="0 0 20 20" fill="none"><rect x="2" y="2" width="7" height="7" rx="2" stroke="var(--text3)" stroke-width="1.6"/><rect x="11" y="2" width="7" height="7" rx="2" stroke="var(--text3)" stroke-width="1.6"/><rect x="2" y="11" width="7" height="7" rx="2" stroke="var(--text3)" stroke-width="1.6"/><rect x="11" y="11" width="7" height="7" rx="2" stroke="var(--text3)" stroke-width="1.6"/></svg>
+    <span class="nb-label">Categories</span>
+  </button>
+  <button class="nb" data-s="cal" onclick="switchScreen('cal',this)">
+    <svg width="20" height="20" viewBox="0 0 20 20" fill="none"><rect x="2" y="4" width="16" height="14" rx="2" stroke="var(--text3)" stroke-width="1.6"/><line x1="6" y1="2" x2="6" y2="6" stroke="var(--text3)" stroke-width="1.6" stroke-linecap="round"/><line x1="14" y1="2" x2="14" y2="6" stroke="var(--text3)" stroke-width="1.6" stroke-linecap="round"/><line x1="2" y1="9" x2="18" y2="9" stroke="var(--text3)" stroke-width="1.6"/></svg>
+    <span class="nb-label">Calendar</span>
+  </button>
+  <button class="nb" data-s="settings" onclick="switchScreen('settings',this)">
+    <svg width="20" height="20" viewBox="0 0 20 20" fill="none"><circle cx="10" cy="10" r="8" stroke="var(--text3)" stroke-width="1.6"/><line x1="10" y1="7" x2="10" y2="11" stroke="var(--text3)" stroke-width="1.6" stroke-linecap="round"/><circle cx="10" cy="13.5" r="1.1" fill="var(--text3)"/></svg>
+    <span class="nb-label">Settings</span>
+  </button>
+</nav>
+</div><!-- /app -->
+
+<!-- ADD/EDIT MODAL -->
+<div class="overlay" id="add-overlay" onclick="closeOnOverlay(event,'add-overlay','closeAddModal')">
+  <div class="modal">
+    <div class="mhead">
+      <button class="mclose" onclick="closeAddModal()">✕</button>
+      <div class="mtitle" id="modal-title">New reminder</div>
+      <button class="msave" onclick="saveReminder()">Save</button>
+    </div>
+    <div class="mbody">
+      <div class="field"><div class="flabel">Project name</div><input class="finput" id="f-name" type="text" placeholder="e.g. Pudgy Penguins" autocomplete="off"/></div>
+      <div class="field">
+        <div class="flabel">Access type</div>
+        <div class="sel-grid">
+          <div class="sopt on" data-g="access" data-v="fcfs" onclick="selOpt(this)"><div class="sopt-t">FCFS</div><div class="sopt-s">First come, first served</div></div>
+          <div class="sopt" data-g="access" data-v="gtd" onclick="selOpt(this)"><div class="sopt-t">GTD</div><div class="sopt-s">Guaranteed spot</div></div>
+        </div>
+      </div>
+      <div class="field">
+        <div class="flabel">Cost</div>
+        <div class="sel-grid">
+          <div class="sopt on" data-g="cost" data-v="free" onclick="selOpt(this)"><div class="sopt-t">Free</div><div class="sopt-s">No cost to mint</div></div>
+          <div class="sopt" data-g="cost" data-v="paid" onclick="selOpt(this)"><div class="sopt-t">Paid</div><div class="sopt-s">Requires payment</div></div>
+        </div>
+      </div>
+      <div class="field">
+        <div class="flabel">Chain</div>
+        <div class="sel-grid">
+          <div class="sopt on" data-g="chain" data-v="eth" onclick="selOpt(this)"><div class="sopt-t">Ethereum</div><div class="sopt-s">ERC-721 / ERC-1155</div></div>
+          <div class="sopt" data-g="chain" data-v="sol" onclick="selOpt(this)"><div class="sopt-t">Solana</div><div class="sopt-s">SPL tokens</div></div>
+        </div>
+      </div>
+      <div class="hint" id="notif-hint">FCFS + Free: reminders at 1 day, 1 hr, 15 min & 5 min before.</div>
+      <div class="field"><div class="flabel">Date & time</div><div class="frow"><input class="finput" id="f-date" type="date"/><input class="finput" id="f-time" type="time" value="12:00"/></div></div>
+      <div class="field"><div class="flabel">Mint price (optional)</div><input class="finput" id="f-price" type="text" placeholder="0.08 ETH, 2 SOL…"/></div>
+      <div class="field"><div class="flabel">Website (optional)</div><input class="finput" id="f-url" type="url" placeholder="https://mintsite.xyz"/></div>
+      <div class="field"><div class="flabel">Notes (optional)</div><textarea class="finput" id="f-notes" placeholder="Wallet requirements, discord link…"></textarea></div>
+    </div>
+  </div>
+</div>
+
+<!-- STATUS SHEET -->
+<div class="sheet-overlay" id="sheet-ov" onclick="closeSheet()">
+  <div class="sheet" onclick="event.stopPropagation()">
+    <div class="sh-title" id="sh-title">Options</div>
+    <button class="sh-btn" onclick="setStatus('minted')"><svg width="18" height="18" viewBox="0 0 18 18" fill="none"><circle cx="9" cy="9" r="7.5" stroke="var(--green)" stroke-width="1.5"/><path d="M5.5 9l2.5 2.5 4.5-5" stroke="var(--green)" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>Minted it</button>
+    <button class="sh-btn danger" onclick="setStatus('missed')"><svg width="18" height="18" viewBox="0 0 18 18" fill="none"><circle cx="9" cy="9" r="7.5" stroke="var(--red)" stroke-width="1.5"/><line x1="6" y1="6" x2="12" y2="12" stroke="var(--red)" stroke-width="1.5" stroke-linecap="round"/><line x1="12" y1="6" x2="6" y2="12" stroke="var(--red)" stroke-width="1.5" stroke-linecap="round"/></svg>Missed it</button>
+    <button class="sh-btn" onclick="setStatus('skipped')"><svg width="18" height="18" viewBox="0 0 18 18" fill="none"><circle cx="9" cy="9" r="7.5" stroke="var(--text3)" stroke-width="1.5"/><path d="M6 9h6M10 7l2 2-2 2" stroke="var(--text3)" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>Skipped</button>
+    <button class="sh-btn" onclick="openEditFromSheet()"><svg width="18" height="18" viewBox="0 0 18 18" fill="none"><path d="M3 15h2.5l8-8-2.5-2.5-8 8V15z" stroke="var(--blue)" stroke-width="1.5" stroke-linejoin="round"/><path d="M11.5 4l2.5 2.5" stroke="var(--blue)" stroke-width="1.5" stroke-linecap="round"/></svg>Edit reminder</button>
+    <button class="sh-btn danger" onclick="deleteReminder()"><svg width="18" height="18" viewBox="0 0 18 18" fill="none"><path d="M3 5h12M7 5V3.5a.5.5 0 0 1 .5-.5h3a.5.5 0 0 1 .5.5V5M14 5l-.8 9.5a1 1 0 0 1-1 .5H5.8a1 1 0 0 1-1-.5L4 5" stroke="var(--red)" stroke-width="1.4" stroke-linecap="round"/></svg>Delete reminder</button>
+    <button class="sh-btn cancel" onclick="closeSheet()">Cancel</button>
+  </div>
+</div>
+
+<div class="toast" id="toast"></div>
+
+<script>
+// ═══════════════════════════════════════════
+//  STATE
+// ═══════════════════════════════════════════
+let reminders = JSON.parse(localStorage.getItem('reminders') || '[]');
+let settings  = JSON.parse(localStorage.getItem('settings') || '{"theme":"light","notifGranted":false,"pushSubscribed":false}');
+let user      = JSON.parse(localStorage.getItem('user') || 'null');
+let activeFilter = 'all';
+let chainFilter  = null;
+let editingId    = null;
+let sheetId      = null;
+let swReg        = null;
+let calDate      = new Date();
+let calSelected  = fmt(new Date());
+
+// ═══════════════════════════════════════════
+//  BOOT
+// ═══════════════════════════════════════════
+document.addEventListener('DOMContentLoaded', async () => {
+  applyTheme();
+  if (user) startApp();
+  else setTimeout(() => document.getElementById('name-input')?.focus(), 100);
+  setGreeting();
+  const tom = new Date(); tom.setDate(tom.getDate()+1);
+  document.getElementById('f-date').value = fmt(tom);
+  await registerSW();
+  checkNotifPermission();
+  setInterval(() => { renderList(); renderCalendar(); }, 60000);
+});
+
+// ═══════════════════════════════════════════
+//  NAME ENTRY LOGIN
+// ═══════════════════════════════════════════
+function submitName() {
+  const input = document.getElementById('name-input');
+  const name = input.value.trim();
+  if (!name) {
+    input.style.borderColor = 'rgba(255,100,100,.8)';
+    input.placeholder = 'Please enter your name';
+    input.focus();
+    return;
+  }
+  finishSignIn({ name });
+}
+
+function finishSignIn(u) {
+  user = u;
+  localStorage.setItem('user', JSON.stringify(user));
+  startApp();
+}
+
+function handleSignOut() {
+  if (!confirm('Sign out?')) return;
+  user = null;
+  localStorage.removeItem('user');
+  switchToScreen('sc-login');
+  document.getElementById('name-input').value = '';
+  document.querySelectorAll('.nb').forEach((b,i) => {
+    b.classList.toggle('on', i===0);
+    syncNavIcon(b, i===0);
+  });
+}
+
+function startApp() {
+  switchToScreen('sc-home');
+  updateUserUI();
+  renderList();
+  renderWeekStrip();
+  renderCalendar();
+  updateStats();
+  updateCatCounts();
+}
+
+function updateUserUI() {
+  if (!user) return;
+  const firstName = user.name?.split(' ')[0] || 'there';
+  document.getElementById('hero-name').textContent = `Hey ${firstName}!`;
+  document.getElementById('settings-uname').textContent = user.name || 'Guest';
+  document.getElementById('settings-uemail').textContent = 'NFT Buddy user';
+  const av = document.getElementById('settings-avatar');
+  av.textContent = (user.name || '?')[0].toUpperCase();
+}
+
+// ═══════════════════════════════════════════
+//  SERVICE WORKER + VAPID
+// ═══════════════════════════════════════════
+async function registerSW() {
+  if (!('serviceWorker' in navigator)) return;
+  try {
+    swReg = await navigator.serviceWorker.register('/sw.js');
+    navigator.serviceWorker.ready.then(() => scheduleAllNotifications());
+  } catch(e) { console.warn('SW reg failed:', e); }
+}
+
+async function requestNotifPermission() {
+  if (!('Notification' in window)) { showToast('Notifications not supported here'); return; }
+  if (Notification.permission === 'granted') { await ensurePushSubscription(); showToast('Notifications already enabled'); updateNotifUI(); return; }
+  const perm = await Notification.requestPermission();
+  settings.notifGranted = perm === 'granted';
+  saveSettings();
+  if (perm === 'granted') { await ensurePushSubscription(); showToast('Notifications enabled!'); scheduleAllNotifications(); }
+  else showToast('Permission denied — check browser settings');
+  updateNotifUI();
+}
+
+async function ensurePushSubscription() {
+  if (!('PushManager' in window)) return;
+  try {
+    const reg = swReg || await navigator.serviceWorker.ready;
+    let sub = await reg.pushManager.getSubscription();
+    if (sub) { sendSubToServer(sub); return; }
+    const res = await fetch('/api/vapid-key');
+    if (!res.ok) return;
+    const { publicKey } = await res.json();
+    sub = await reg.pushManager.subscribe({ userVisibleOnly: true, applicationServerKey: u8(publicKey) });
+    sendSubToServer(sub);
+    settings.pushSubscribed = true;
+    saveSettings();
+  } catch(e) { console.warn('Push sub failed:', e); }
+}
+
+async function sendSubToServer(sub) {
+  try { await fetch('/api/subscribe', { method:'POST', headers:{'Content-Type':'application/json'}, body:JSON.stringify({ subscription: sub.toJSON() }) }); } catch {}
+}
+
+function checkNotifPermission() {
+  if (!('Notification' in window)) return;
+  settings.notifGranted = Notification.permission === 'granted';
+  saveSettings(); updateNotifUI();
+  if (settings.notifGranted && !settings.pushSubscribed) ensurePushSubscription();
+}
+
+function updateNotifUI() {
+  const g = Notification.permission === 'granted';
+  document.getElementById('notif-prompt').classList.toggle('show', !g && 'Notification' in window);
+  document.getElementById('notif-status-text').textContent = g && settings.pushSubscribed
+    ? 'Enabled — fires even when browser is closed' : g ? 'Enabled' : 'Tap to enable';
+}
+
+function getOffsets(access, cost) {
+  const o = [];
+  if (cost === 'paid') o.push({ mins:2880, label:'2 days before — prepare funds' });
+  o.push({ mins:1440, label:'1 day before' });
+  o.push({ mins:60, label:'1 hour before' });
+  if (access === 'fcfs') { o.push({ mins:15, label:'15 min — get ready!', urgent:true }); o.push({ mins:5, label:'5 MIN — GO NOW!', urgent:true }); }
+  return o;
+}
+
+function scheduleAllNotifications() {
+  if (Notification.permission !== 'granted' || !navigator.serviceWorker.controller) return;
+  reminders.filter(r => r.status === 'upcoming').forEach(scheduleForReminder);
+}
+
+function scheduleForReminder(r) {
+  if (Notification.permission !== 'granted' || !navigator.serviceWorker.controller) return;
+  getOffsets(r.accessType, r.costType).forEach(off => {
+    const delay = new Date(r.mintDate).getTime() - off.mins*60000 - Date.now();
+    if (delay <= 0) return;
+    const body = off.mins <= 5 && r.accessType === 'fcfs'
+      ? `${r.projectName} is minting NOW!`
+      : `${r.projectName} mints ${off.label}${r.mintPrice ? ' · '+r.mintPrice : ''}`;
+    navigator.serviceWorker.controller.postMessage({ type:'SCHEDULE_NOTIF', id:`${r.id}-${off.mins}`, title:'NFT Buddy', body, delay, tag:`${r.id}-${off.mins}`, urgent:!!off.urgent });
+  });
+}
+
+function cancelNotifs(id) {
+  if (navigator.serviceWorker.controller) navigator.serviceWorker.controller.postMessage({ type:'CANCEL_NOTIF', id });
+}
+
+// ═══════════════════════════════════════════
+//  ADMIN PUSH
+// ═══════════════════════════════════════════
+async function adminSendPush() {
+  const token = document.getElementById('admin-token-input')?.value?.trim();
+  const title = document.getElementById('admin-notif-title')?.value?.trim();
+  const body  = document.getElementById('admin-notif-body')?.value?.trim();
+  if (!token) { showToast('Enter your admin token'); return; }
+  if (!title || !body) { showToast('Enter title and message'); return; }
+  const btn = document.getElementById('admin-send-btn');
+  btn.disabled = true; btn.textContent = 'Sending…';
+  try {
+    const res = await fetch('/api/send', { method:'POST', headers:{'Content-Type':'application/json'}, body:JSON.stringify({ title, body, url:'/', adminToken:token }) });
+    const d = await res.json();
+    if (res.ok) { showToast(`Sent to ${d.sent} subscriber${d.sent !== 1 ? 's' : ''}`); document.getElementById('admin-notif-title').value = ''; document.getElementById('admin-notif-body').value = ''; }
+    else showToast('Error: ' + (d.error || 'Unknown'));
+  } catch { showToast('Network error'); }
+  finally { btn.disabled = false; btn.textContent = 'Send to all subscribers'; }
+}
+
+async function loadSubCount() {
+  const token = document.getElementById('admin-token-input')?.value?.trim();
+  if (!token) return;
+  try {
+    const res = await fetch(`/api/stats?adminToken=${encodeURIComponent(token)}`);
+    const d = await res.json();
+    const el = document.getElementById('admin-sub-count');
+    if (el) el.textContent = res.ok ? `${d.subscribers} sub${d.subscribers !== 1 ? 's' : ''}` : 'Bad token';
+  } catch {}
+}
+
+// ═══════════════════════════════════════════
+//  CRUD
+// ═══════════════════════════════════════════
+function saveReminder() {
+  const name  = document.getElementById('f-name').value.trim();
+  const date  = document.getElementById('f-date').value;
+  const time  = document.getElementById('f-time').value;
+  const price = document.getElementById('f-price').value.trim();
+  const url   = document.getElementById('f-url').value.trim();
+  const notes = document.getElementById('f-notes').value.trim();
+  const access = getSel('access'), cost = getSel('cost'), chain = getSel('chain');
+
+  if (!name) { document.getElementById('f-name').classList.add('err'); document.getElementById('f-name').focus(); return; }
+  if (!date || !time) { showToast('Set a date and time'); return; }
+  const mintDate = new Date(`${date}T${time}`).toISOString();
+
+  if (editingId) {
+    const i = reminders.findIndex(r => r.id === editingId);
+    if (i >= 0) { cancelNotifs(editingId); reminders[i] = { ...reminders[i], projectName:name, mintDate, accessType:access, costType:cost, chain, mintPrice:price, websiteUrl:url, notes }; scheduleForReminder(reminders[i]); }
+    showToast('Reminder updated');
+  } else {
+    const r = { id:uid(), projectName:name, mintDate, accessType:access, costType:cost, chain, mintPrice:price, websiteUrl:url, notes, status:'upcoming', createdAt:new Date().toISOString() };
+    reminders.unshift(r);
+    scheduleForReminder(r);
+    showToast('Reminder added');
+  }
+  saveRems(); closeAddModal(); renderList(); renderWeekStrip(); renderCalendar(); updateStats(); updateCatCounts();
+}
+
+function deleteReminder() {
+  if (!sheetId) return;
+  cancelNotifs(sheetId);
+  reminders = reminders.filter(r => r.id !== sheetId);
+  saveRems(); closeSheet(); renderList(); renderWeekStrip(); renderCalendar(); updateStats(); updateCatCounts();
+  showToast('Deleted');
+}
+
+function setStatus(s) {
+  const r = reminders.find(r => r.id === sheetId);
+  if (r) { r.status = s; if (s !== 'upcoming') cancelNotifs(r.id); }
+  saveRems(); closeSheet(); renderList(); updateStats();
+  showToast({ minted:'Marked as minted', missed:'Marked as missed', skipped:'Skipped' }[s] || 'Updated');
+}
+
+// ═══════════════════════════════════════════
+//  RENDER LIST
+// ═══════════════════════════════════════════
+function renderList() {
+  const el = document.getElementById('reminders-list');
+  let list = [...reminders].sort((a,b) => new Date(a.mintDate)-new Date(b.mintDate));
+
+  if (activeFilter === 'upcoming') list = list.filter(r => r.status === 'upcoming');
+  else if (activeFilter === 'minted') list = list.filter(r => r.status === 'minted');
+  else if (activeFilter === 'fcfs') list = list.filter(r => r.accessType === 'fcfs');
+  else if (activeFilter === 'gtd')  list = list.filter(r => r.accessType === 'gtd');
+  else if (activeFilter === 'free') list = list.filter(r => r.costType === 'free');
+  else if (activeFilter === 'paid') list = list.filter(r => r.costType === 'paid');
+  if (chainFilter) list = list.filter(r => r.chain === chainFilter);
+
+  const upcoming = reminders.filter(r => r.status === 'upcoming').length;
+  document.getElementById('today-label').textContent = activeFilter === 'upcoming' ? "Upcoming Mints" : "Today's Mints";
+
+  if (!list.length) {
+    el.innerHTML = `<div class="empty"><div class="empty-icon"><svg width="28" height="28" viewBox="0 0 28 28" fill="none"><rect x="4" y="6" width="20" height="18" rx="3" stroke="var(--teal)" stroke-width="1.8"/><line x1="8" y1="3" x2="8" y2="9" stroke="var(--teal)" stroke-width="1.8" stroke-linecap="round"/><line x1="20" y1="3" x2="20" y2="9" stroke="var(--teal)" stroke-width="1.8" stroke-linecap="round"/><line x1="4" y1="13" x2="24" y2="13" stroke="var(--teal)" stroke-width="1.8"/></svg></div><div class="empty-t">${activeFilter==='all'?'No reminders yet':'Nothing here'}</div><div class="empty-s">${activeFilter==='all'?'Tap + to add your first mint reminder':'Try a different filter'}</div></div>`;
+    return;
+  }
+  el.innerHTML = list.map(cardHTML).join('');
+}
+
+function cardHTML(r) {
+  const now = Date.now(), mint = new Date(r.mintDate).getTime(), diff = mint-now, hrs = diff/3600000;
+  let pc='tp-normal', pt='';
+  if (r.status==='minted') { pc='tp-done'; pt='Minted'; }
+  else if (r.status==='missed') { pc='tp-missed'; pt='Missed'; }
+  else if (r.status==='skipped') { pc='tp-normal'; pt='Skipped'; }
+  else if (diff<0) { pc='tp-missed'; pt='Ended'; }
+  else if (hrs<1) { pc='tp-urgent'; pt=Math.round(hrs*60)+'m left'; }
+  else if (hrs<24) { pc='tp-soon'; pt=Math.floor(hrs)+'h left'; }
+  else { pc='tp-normal'; pt=Math.floor(hrs/24)+'d left'; }
+
+  const barColor = { fcfs:'var(--red)', gtd:'var(--blue)', free:'var(--green)', paid:'var(--amber)' }[r.accessType] || 'var(--teal)';
+  const tagA = r.accessType==='fcfs' ? `<span class="rtag tag-fcfs">FCFS</span>` : `<span class="rtag tag-gtd">GTD</span>`;
+  const tagC = r.costType==='free' ? `<span class="rtag tag-free">Free</span>` : `<span class="rtag tag-paid">Paid</span>`;
+  const tagCh = r.chain === 'sol' ? `<span class="rtag tag-sol">SOL</span>` : `<span class="rtag tag-eth">ETH</span>`;
+  const tagP = r.mintPrice ? `<span class="rtag tag-price">${esc(r.mintPrice)}</span>` : '';
+  const fL = r.websiteUrl ? `<a class="rcard-link" href="${esc(r.websiteUrl)}" target="_blank" onclick="event.stopPropagation()">mint site ↗</a>` : `<span></span>`;
+  const fR = r.status==='upcoming' ? `<button class="rcard-action" onclick="event.stopPropagation();openSheet('${r.id}')">update status</button>` : `<span style="font-size:12px;color:var(--text3);font-weight:600;">${r.status}</span>`;
+  const notes = r.notes ? `<div class="rcard-notes">${esc(r.notes)}</div>` : '';
+
+  return `<div class="rcard" onclick="openEditModal('${r.id}')">
+    <div class="rcard-bar" style="background:${barColor}"></div>
+    <div class="rcard-body">
+      <div class="rcard-top"><div class="rcard-name">${esc(r.projectName)}</div><span class="rcard-time ${pc}">${pt}</span></div>
+      <div class="rcard-date">${fmtDisplay(r.mintDate)}</div>
+      <div class="rcard-tags">${tagA}${tagC}${tagCh}${tagP}</div>
+      ${notes}
+      <div class="rcard-foot">${fL}${fR}</div>
+    </div>
+  </div>`;
+}
+
+// ═══════════════════════════════════════════
+//  WEEK STRIP
+// ═══════════════════════════════════════════
+function renderWeekStrip() {
+  const strip = document.getElementById('week-strip');
+  const today = new Date();
+  const days = ['Sun','Mon','Tue','Wed','Thu','Fri','Sat'];
+  const mintsPerDay = {};
+  reminders.forEach(r => { const d = fmt(new Date(r.mintDate)); mintsPerDay[d] = (mintsPerDay[d]||0)+1; });
+
+  const startOfWeek = new Date(today);
+  startOfWeek.setDate(today.getDate() - today.getDay());
+  let html = '';
+  for (let i=0;i<7;i++) {
+    const d = new Date(startOfWeek); d.setDate(startOfWeek.getDate()+i);
+    const ds = fmt(d);
+    const isToday = ds === fmt(today);
+    const hasMint = !!mintsPerDay[ds];
+    html += `<div class="week-day${isToday?' today':''}${hasMint?' has-mint':''}" onclick="jumpToCalDay('${ds}')">
+      <span class="week-label">${days[d.getDay()]}</span>
+      <div class="week-num">${d.getDate()}</div>
+      <div class="week-dot"></div>
+    </div>`;
+  }
+  strip.innerHTML = html;
+}
+
+// ═══════════════════════════════════════════
+//  CALENDAR
+// ═══════════════════════════════════════════
+function renderCalendar() {
+  const y=calDate.getFullYear(), m=calDate.getMonth();
+  document.getElementById('cal-month-lbl').textContent = new Date(y,m,1).toLocaleDateString('en-US',{month:'long',year:'numeric'});
+  const fd = new Date(y,m,1).getDay(), dim = new Date(y,m+1,0).getDate(), today = fmt(new Date());
+  const dotMap = {};
+  reminders.forEach(r => { const d=fmt(new Date(r.mintDate)); if(!dotMap[d]) dotMap[d]=new Set(); dotMap[d].add(r.accessType); });
+  const dows = ['S','M','T','W','T','F','S'];
+  let html = dows.map(d=>`<div class="cal-dow">${d}</div>`).join('');
+  for (let i=0;i<fd;i++) html+=`<div class="cc cm"></div>`;
+  for (let d=1;d<=dim;d++) {
+    const ds=`${y}-${String(m+1).padStart(2,'0')}-${String(d).padStart(2,'0')}`;
+    const dots = dotMap[ds] ? [...dotMap[ds]].map(t=>`<div class="cdot" style="background:${t==='fcfs'?'rgba(255,255,255,.8)':'rgba(255,255,255,.5)'}"></div>`).join('') : '';
+    const cls=['cc',ds===today?'ct':'',ds===calSelected?'cs':''].filter(Boolean).join(' ');
+    html+=`<div class="${cls}" onclick="selCalDay('${ds}')"><span class="cn">${d}</span>${dots?`<div class="cdw">${dots}</div>`:''}</div>`;
+  }
+  document.getElementById('cal-grid').innerHTML = html;
+  renderDayEvents();
+}
+
+function selCalDay(ds) { calSelected=ds; renderCalendar(); }
+function jumpToCalDay(ds) { calSelected=ds; switchScreen('cal',document.querySelector('[data-s=cal]')); }
+function changeMonth(d) { calDate.setMonth(calDate.getMonth()+d); renderCalendar(); }
+
+function renderDayEvents() {
+  const dayR = reminders.filter(r=>fmt(new Date(r.mintDate))===calSelected).sort((a,b)=>new Date(a.mintDate)-new Date(b.mintDate));
+  const label = new Date(calSelected+'T12:00:00').toLocaleDateString('en-US',{weekday:'long',month:'long',day:'numeric'});
+  const barColors = { fcfs:'var(--red)', gtd:'var(--blue)', free:'var(--green)', paid:'var(--amber)' };
+  document.getElementById('cal-events').innerHTML = `<div class="cal-day-lbl">${label}</div>`
+    + (dayR.length
+      ? dayR.map(r=>`<div class="cal-event"><div class="cal-edot" style="background:${barColors[r.accessType]||'var(--teal)'}"></div><div><div class="cal-ename">${esc(r.projectName)}</div><div class="cal-emeta">${new Date(r.mintDate).toLocaleTimeString('en-US',{hour:'numeric',minute:'2-digit'})} · ${r.accessType.toUpperCase()} · ${r.costType}${r.mintPrice?' · '+esc(r.mintPrice):''}</div></div></div>`).join('')
+      : `<div style="padding:30px 0;text-align:center;color:var(--text3);font-size:14px;">No mints on this day</div>`);
+}
+
+// ═══════════════════════════════════════════
+//  CATEGORIES
+// ═══════════════════════════════════════════
+function updateCatCounts() {
+  const c = (f,k) => reminders.filter(f).length + (k%1===0?' mint':' mints');
+  document.getElementById('cat-fcfs-count').textContent = reminders.filter(r=>r.accessType==='fcfs').length + ' mints';
+  document.getElementById('cat-gtd-count').textContent  = reminders.filter(r=>r.accessType==='gtd').length  + ' mints';
+  document.getElementById('cat-free-count').textContent = reminders.filter(r=>r.costType==='free').length   + ' mints';
+  document.getElementById('cat-paid-count').textContent = reminders.filter(r=>r.costType==='paid').length   + ' mints';
+  document.getElementById('cat-eth-count').textContent  = reminders.filter(r=>r.chain==='eth'||!r.chain).length + ' mints';
+  document.getElementById('cat-sol-count').textContent  = reminders.filter(r=>r.chain==='sol').length       + ' mints';
+}
+
+function filterByCategory(cat) {
+  chainFilter = null;
+  activeFilter = cat;
+  document.querySelectorAll('#filter-row .chip').forEach(c => c.classList.toggle('on', c.dataset.filter === cat));
+  switchScreen('home', document.querySelector('[data-s=home]'));
+  renderList();
+}
+
+function filterByChain(chain) {
+  chainFilter = chain;
+  activeFilter = 'all';
+  document.querySelectorAll('#filter-row .chip').forEach(c => c.classList.toggle('on', c.dataset.filter === 'all'));
+  switchScreen('home', document.querySelector('[data-s=home]'));
+  renderList();
+}
+
+// ═══════════════════════════════════════════
+//  MODAL
+// ═══════════════════════════════════════════
+function openAddModal() {
+  editingId=null;
+  document.getElementById('modal-title').textContent='New reminder';
+  ['f-name','f-price','f-url','f-notes'].forEach(id=>document.getElementById(id).value='');
+  document.getElementById('f-name').classList.remove('err');
+  const tom=new Date(); tom.setDate(tom.getDate()+1);
+  document.getElementById('f-date').value=fmt(tom);
+  document.getElementById('f-time').value='12:00';
+  setSel('access','fcfs'); setSel('cost','free'); setSel('chain','eth');
+  updateHint();
+  document.getElementById('add-overlay').classList.add('open');
+  setTimeout(()=>document.getElementById('f-name').focus(),350);
+}
+
+function openEditModal(id) {
+  const r=reminders.find(r=>r.id===id); if(!r) return;
+  editingId=id;
+  document.getElementById('modal-title').textContent='Edit reminder';
+  document.getElementById('f-name').value=r.projectName;
+  document.getElementById('f-price').value=r.mintPrice||'';
+  document.getElementById('f-url').value=r.websiteUrl||'';
+  document.getElementById('f-notes').value=r.notes||'';
+  const dt=new Date(r.mintDate);
+  document.getElementById('f-date').value=fmt(dt);
+  document.getElementById('f-time').value=dt.toTimeString().slice(0,5);
+  setSel('access',r.accessType); setSel('cost',r.costType); setSel('chain',r.chain||'eth');
+  updateHint();
+  document.getElementById('add-overlay').classList.add('open');
+}
+
+function closeAddModal() { document.getElementById('add-overlay').classList.remove('open'); }
+function closeOnOverlay(e,id,fn) { if(e.target===document.getElementById(id)) window[fn](); }
+
+// ═══════════════════════════════════════════
+//  SHEET
+// ═══════════════════════════════════════════
+function openSheet(id) {
+  sheetId=id;
+  const r=reminders.find(r=>r.id===id);
+  document.getElementById('sh-title').textContent=r?r.projectName:'Options';
+  document.getElementById('sheet-ov').classList.add('open');
+}
+function closeSheet() { document.getElementById('sheet-ov').classList.remove('open'); }
+function openEditFromSheet() { closeSheet(); openEditModal(sheetId); }
+
+// ═══════════════════════════════════════════
+//  SELECTOR HELPERS
+// ═══════════════════════════════════════════
+function selOpt(el) {
+  document.querySelectorAll(`[data-g="${el.dataset.g}"]`).forEach(o=>o.classList.remove('on'));
+  el.classList.add('on'); updateHint();
+}
+function getSel(g) { return document.querySelector(`[data-g="${g}"].on`)?.dataset?.v||null; }
+function setSel(g,v) { document.querySelectorAll(`[data-g="${g}"]`).forEach(o=>o.classList.toggle('on',o.dataset.v===v)); }
+function updateHint() {
+  const a=getSel('access'),c=getSel('cost');
+  const map={'fcfs-free':'FCFS + Free: reminders at 1 day, 1 hr, 15 min & 5 min before.','fcfs-paid':'FCFS + Paid: 2 days, 1 day, 1 hr, 15 min & 5 min before.','gtd-free':'GTD + Free: reminders at 1 day & 1 hour before.','gtd-paid':'GTD + Paid: 2 days, 1 day & 1 hour before.'};
+  document.getElementById('notif-hint').textContent=map[`${a}-${c}`]||'';
+}
+
+// ═══════════════════════════════════════════
+//  FILTERS
+// ═══════════════════════════════════════════
+document.getElementById('filter-row').addEventListener('click',e=>{
+  const c=e.target.closest('[data-filter]'); if(!c) return;
+  activeFilter=c.dataset.filter; chainFilter=null;
+  document.querySelectorAll('#filter-row .chip').forEach(ch=>ch.classList.toggle('on',ch===c));
+  renderList();
+});
+
+// ═══════════════════════════════════════════
+//  SCREEN NAVIGATION
+// ═══════════════════════════════════════════
+function switchScreen(name, btn) {
+  document.querySelectorAll('.screen').forEach(s=>s.classList.remove('active'));
+  document.getElementById('sc-'+name).classList.add('active');
+  document.querySelectorAll('.nb').forEach(b=>{
+    const on=b===btn;
+    b.classList.toggle('on',on);
+    syncNavIcon(b,on);
+  });
+  if(name==='cal') renderCalendar();
+  if(name==='settings') { updateStats(); updateNotifUI(); }
+  if(name==='cats') updateCatCounts();
+}
+
+function syncNavIcon(btn, on) {
+  const color = on ? 'var(--teal)' : 'var(--text3)';
+  btn.querySelectorAll('svg *[stroke]:not([stroke="none"])').forEach(el=>el.setAttribute('stroke',color));
+  btn.querySelectorAll('svg *[fill]:not([fill="none"])').forEach(el=>el.setAttribute('fill',color));
+  btn.querySelector('.nb-label').style.color = color;
+}
+
+function switchToScreen(id) {
+  document.querySelectorAll('.screen').forEach(s=>s.classList.remove('active'));
+  document.getElementById(id).classList.add('active');
+}
+
+// ═══════════════════════════════════════════
+//  THEME
+// ═══════════════════════════════════════════
+function applyTheme() {
+  document.documentElement.setAttribute('data-theme',settings.theme);
+  const dark=settings.theme==='dark';
+  document.getElementById('theme-toggle').classList.toggle('on',dark);
+  document.getElementById('theme-sub').textContent=dark?'Currently dark':'Currently light';
+  document.querySelector('meta[name="theme-color"]').content=dark?'#0A1614':'#0CC8A8';
+}
+function toggleTheme() { settings.theme=settings.theme==='dark'?'light':'dark'; saveSettings(); applyTheme(); }
+
+// ═══════════════════════════════════════════
+//  STATS
+// ═══════════════════════════════════════════
+function updateStats() {
+  document.getElementById('st-total').textContent=reminders.length;
+  document.getElementById('st-upcoming').textContent=reminders.filter(r=>r.status==='upcoming').length;
+  document.getElementById('st-minted').textContent=reminders.filter(r=>r.status==='minted').length;
+  document.getElementById('st-missed').textContent=reminders.filter(r=>r.status==='missed').length;
+}
+
+// ═══════════════════════════════════════════
+//  TOAST
+// ═══════════════════════════════════════════
+let _tt;
+function showToast(msg) {
+  const t=document.getElementById('toast'); t.textContent=msg; t.classList.add('show');
+  clearTimeout(_tt); _tt=setTimeout(()=>t.classList.remove('show'),2500);
+}
+
+// ═══════════════════════════════════════════
+//  HELPERS
+// ═══════════════════════════════════════════
+function setGreeting() {
+  const h=new Date().getHours();
+  document.getElementById('greeting-text').textContent=h<12?'Good morning':h<17?'Good afternoon':'Good evening';
+}
+function fmt(d) { return `${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,'0')}-${String(d.getDate()).padStart(2,'0')}`; }
+function fmtDisplay(iso) {
+  const d=new Date(iso),today=fmt(new Date()),tomorrow=fmt(new Date(Date.now()+86400000)),ds=fmt(d);
+  const pre=ds===today?'Today':ds===tomorrow?'Tomorrow':d.toLocaleDateString('en-US',{month:'short',day:'numeric'});
+  return `${pre} · ${d.toLocaleTimeString('en-US',{hour:'numeric',minute:'2-digit'})}`;
+}
+function esc(s) { return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;'); }
+function uid() { return Date.now().toString(36)+Math.random().toString(36).slice(2,7); }
+function u8(b64) { const p='='.repeat((4-b64.length%4)%4),b=(b64+p).replace(/-/g,'+').replace(/_/g,'/'),r=atob(b); return Uint8Array.from([...r].map(c=>c.charCodeAt(0))); }
+function saveRems() { localStorage.setItem('reminders',JSON.stringify(reminders)); }
+function saveSettings() { localStorage.setItem('settings',JSON.stringify(settings)); }
+
+document.getElementById('f-name').addEventListener('input',function(){this.classList.remove('err');});
+</script>
+</body>
+</html>

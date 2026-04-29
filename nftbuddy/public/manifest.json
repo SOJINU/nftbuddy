@@ -1,0 +1,26 @@
+{
+  "name": "NFT Buddy",
+  "short_name": "NFT Buddy",
+  "description": "NFT Buddy — your NFT mint companion. Never miss a drop.",
+  "start_url": "/",
+  "display": "standalone",
+  "orientation": "portrait",
+  "theme_color": "#0CC8A8",
+  "background_color": "#0CC8A8",
+  "icons": [
+    {
+      "src": "/icon-192.png",
+      "sizes": "192x192",
+      "type": "image/png",
+      "purpose": "maskable any"
+    },
+    {
+      "src": "/icon-512.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "maskable any"
+    }
+  ],
+  "categories": ["utilities", "productivity"],
+  "screenshots": []
+}

@@ -1,0 +1,18 @@
+{
+  "name": "nft-buddy",
+  "version": "3.0.0",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "dev": "vercel dev",
+    "gen-vapid": "node scripts/gen-vapid.js",
+    "deploy": "vercel --prod"
+  },
+  "dependencies": {
+    "@vercel/kv": "^2.0.0",
+    "web-push": "^3.6.7"
+  },
+  "devDependencies": {
+    "vercel": "^32.0.0"
+  }
+}
